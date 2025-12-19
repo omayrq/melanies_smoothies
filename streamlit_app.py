@@ -22,7 +22,7 @@ st.write("The name on your smoothie will be:", _name_on_order)
 # ✅ Universal session
 session = get_snowflake_session()
 
-my_dataframe = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS").select(col("FRUIT_NAME")),col('SEARCH_ON')
+my_dataframe = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS").select(col("FRUIT_NAME"), col('SEARCH_ON'))
 
 st.dataframe(data=my_dataframe, use_container_width=True)
 st.stop()
