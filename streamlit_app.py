@@ -48,7 +48,7 @@ if ingredients_list:
         st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
         
         st.subheader(fruit_chosen + 'Nutrition Information')
-        fruityvice_response = requests.get("https://my.fruityvice.com/api/fruit/" + fruit_chosen)
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
         
         #smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + fruit_chosen)
         # st.text(smoothiefroot_response)
