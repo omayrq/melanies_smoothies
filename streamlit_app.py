@@ -2,6 +2,7 @@
 import streamlit as st
 from snowflake.snowpark.functions import col
 import requests
+import pandas as pd
 
 # Try Snowflake Streamlit first, else fallback to normal Streamlit
 def get_snowflake_session():
@@ -24,7 +25,11 @@ session = get_snowflake_session()
 
 my_dataframe = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS").select(col("FRUIT_NAME"), col('SEARCH_ON'))
 
-st.dataframe(data=my_dataframe, use_container_width=True)
+# st.dataframe(data=my_dataframe, use_container_width=True)
+# st.stop()
+
+pd_df = my_dataframe.to_pandas()
+st.dataframe(pd_df)
 st.stop()
 
 ingredients_list = st.multiselect(
@@ -50,5 +55,3 @@ if ingredients_list:
         ).collect()
 
         st.success("Your Smoothie is ordered!", icon="✅")
-
-
