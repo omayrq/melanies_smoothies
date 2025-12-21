@@ -39,6 +39,40 @@ ingredients_list = st.multiselect(
 )
 
 if ingredients_list:
+    # 1. Create the string for the database ONCE using a single space between fruits
+    # This prevents the "Apples Lime XimeniaApples Lime Ximenia" error
+    ingredients_string = " ".join(ingredients_list)
+
+    # 2. Loop through the list ONLY for displaying nutrition data
+    for fruit_chosen in ingredients_list:
+        # Get the search value from your Snowflake dataframe
+        search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+        
+        st.subheader(fruit_chosen + ' Nutrition Information')
+        
+        # API Call using the search_on variable
+        smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{search_on}")
+        
+        # Display the data if the request was successful
+        if smoothiefroot_response.status_code == 200:
+            st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+        else:
+            st.error(f"Could not find nutrition data for {fruit_chosen}.")
+
+    # 3. Submit the order with the clean ingredients_string
+    time_to_insert = st.button("Submit Order")
+
+    if time_to_insert:
+        session.sql(
+            "INSERT INTO SMOOTHIES.PUBLIC.ORDERS (ingredients, name_on_order) VALUES (?, ?)",
+            params=[ingredients_string, _name_on_order]
+        ).collect()
+
+        st.success(f"Your Smoothie is ordered, {_name_on_order}!", icon="✅")
+
+
+"""
+if ingredients_list:
     ingredients_string = " ".join(ingredients_list)
 
     for fruit_chosen in ingredients_list:
@@ -65,3 +99,5 @@ if ingredients_list:
         ).collect()
 
         st.success("Your Smoothie is ordered!", icon="✅")
+"""
+        
