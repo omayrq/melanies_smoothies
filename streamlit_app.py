@@ -71,33 +71,3 @@ if ingredients_list:
         st.success(f"Your Smoothie is ordered, {_name_on_order}!", icon="✅")
 
 
-"""
-if ingredients_list:
-    ingredients_string = " ".join(ingredients_list)
-
-    for fruit_chosen in ingredients_list:
-        ingredients_string += fruit_chosen + ' '
-
-        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
-        st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
-        
-        st.subheader(fruit_chosen + 'Nutrition Information')
-        #fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
-        
-        smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{search_on}")#+ fruit_chosen)
-        # st.text(smoothiefroot_response)
-        
-        sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
-        
-        #sf_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
-        
-    
-    if st.button("Submit Order"):
-        session.sql(
-            "INSERT INTO SMOOTHIES.PUBLIC.ORDERS (ingredients, name_on_order) VALUES (?, ?)",
-            params=[ingredients_string, _name_on_order]
-        ).collect()
-
-        st.success("Your Smoothie is ordered!", icon="✅")
-"""
-        
