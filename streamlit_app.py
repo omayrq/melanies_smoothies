@@ -17,13 +17,16 @@ st.write('The name on your Smoothie will be:', name_on_order)
 cnx = st.connection("snowflake")
 session = cnx.session()
 
-# Load fruit options from the table
+# Load fruit options and convert to a format Streamlit understands
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
+
+# Convert the Snowpark dataframe to a Pandas dataframe so the list displays correctly
+pd_df = my_dataframe.to_pandas()
 
 # Feature: Multiselect with a maximum of 5 choices
 ingredients_list = st.multiselect(
     'Choose up to 5 ingredients:'
-    , my_dataframe
+    , pd_df['FRUIT_NAME'] # Use the specific column from the Pandas dataframe
     , max_selections=5
 )
 
