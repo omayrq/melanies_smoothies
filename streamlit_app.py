@@ -20,10 +20,13 @@ session = cnx.session()
 
 # Load fruit options and convert to Pandas for the widget
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
-st.dataframe(data=my_dataframe, use_container_width=True)
-st.stop()
+#st.dataframe(data=my_dataframe, use_container_width=True)
+#st.stop()
 
+# converting snowpark dataframe to a pandas dataframe so we can use the LOC function 
 pd_df = my_dataframe.to_pandas()
+st.dataframe(pd_df)
+st.stop()
 
 # Feature: Multiselect with a maximum of 5 choices
 ingredients_list = st.multiselect(
