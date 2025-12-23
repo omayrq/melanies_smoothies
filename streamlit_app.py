@@ -10,11 +10,11 @@ st.write(
     """
 )
 
-# Capture the customer's name
+# Feature: Capture the customer's name
 name_on_order = st.text_input('Name on Smoothie:')
 st.write('The name on your Smoothie will be:', name_on_order)
 
-# Connection Method for Streamlit Cloud - Ensure secrets are lowercase [connections.snowflake]
+# Feature: Connection Method for Streamlit Cloud
 cnx = st.connection("snowflake")
 session = cnx.session()
 
@@ -22,7 +22,7 @@ session = cnx.session()
 my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 pd_df = my_dataframe.to_pandas()
 
-# Multiselect with a maximum of 5 choices
+# Feature: Multiselect with a maximum of 5 choices
 ingredients_list = st.multiselect(
     'Choose up to 5 ingredients:',
     pd_df['FRUIT_NAME'],
@@ -35,20 +35,21 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
         
-        # DISPLAY NUTRITION INFORMATION DYNAMICALLY
+        # New section to display smoothiefroot nutrition information
         st.subheader(fruit_chosen + ' Nutrition Information')
-        # We use the fruit_chosen variable to make the URL dynamic
-        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
         
-        # Display the JSON response in a clean dataframe table
-        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
-    # SQL Insert statement
+    # SQL Insert including ingredients AND customer name
     my_insert_stmt = """ insert into smoothies.public.orders(ingredients, name_on_order)
             values ('""" + ingredients_string + """','""" + name_on_order + """')"""
 
+    # Button to trigger the order
     time_to_insert = st.button('Submit Order')
 
     if time_to_insert:
         session.sql(my_insert_stmt).collect()
-        st.success('Your Smoothie is ordered!', icon="✅")
+        st.success('Your Smoothie is ordered!', icon="✅") #
+
+# New section to display
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True) #
